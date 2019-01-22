@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import train from './train.svg';
-import { pairUpTrainData } from './Functions';
+import { pairUpTrainData, timeDifference } from './Functions';
 
 const axios = require('axios');
 
@@ -9,10 +9,10 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.updateClock();
     this.state = {
       trainsToLondon: {}
     };
+    this.updateClock();  
   }
 
   fetchTrainData() {
@@ -42,17 +42,21 @@ class App extends Component {
   }
   
   render() {
-    console.log(this.state.trainsToLondon)
     return (
       <div className="App">
       <h1>Current Time: {this.state.time}</h1>
           <ul>
-          <h2><img src={train} alt="train.svg"/>To London</h2>
-          {Object.values(this.state.trainsToLondon).map(t => {
-            return <div>
-              <h2>{t.std} ({t.etd})</h2>
+            <div className="titleText">
+              <img src={train} alt="train.svg" />Next trains from Gerrards Cross<img src={train} alt="train.svg" />
             </div>
-          })}</ul>
+            <div className="trainTimeWrap">{Object.values(this.state.trainsToLondon).map(t => {
+              return <div>{t.sta && 
+                <div key={t.rsid} className="trainTime">
+                  <h2>{t.std} {(t.etd === "On time") ? "" : `(${t.etd})`} => {t.sta} ({timeDifference(t.sta, t.std)} minutes)</h2>
+                </div>
+              }</div>
+          })}</div>
+          </ul>
       </div>
     );
   }

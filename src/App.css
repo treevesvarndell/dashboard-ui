@@ -1,5 +1,4 @@
 .App {
-  margin: 100px 500px 100px 500px;
   text-align: center;
 }
 
@@ -16,6 +15,20 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.titleText {
+  font-size: xx-large;
+  vertical-align: middle;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+.trainTime {
+  margin-left: 400px;
+  margin-right: 400px;
+  margin-top: 10px;
+  border: 1px solid brown;
+  border-radius: 10px;
 }
 
 @keyframes App-logo-spin {
