@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import train from './train.svg';
 import { pairUpTrainData, timeDifference } from './Functions';
 
 const axios = require('axios');
