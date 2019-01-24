@@ -62,7 +62,7 @@ class App extends Component {
             </div>
           }</div>
     })}</div>
-      <div className="footer"></div>
+      <div className="bottom">&nbsp;</div>
       </div>
     );
   }

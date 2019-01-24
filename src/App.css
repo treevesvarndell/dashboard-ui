@@ -21,12 +21,19 @@
 .App-header-clock {
   background-color: #6091fc;
   min-height: 10vh;
-  display: flex;
   align-items: center;
   justify-content: space-around;
   font-size: calc(35px + 2vmin);
   color: rgb(255, 255, 255);
   padding-right: 40px;
+}
+
+.bottom {
+  display:1;
+  font-size: calc(15px + 2vmin);
+  align-items: center;
+  justify-content: space-around;
+  background-color: #286cff;
 }
 
 .titleText {
