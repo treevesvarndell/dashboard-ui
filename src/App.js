@@ -46,19 +46,24 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <h1>Current Time: {this.state.time}</h1>
-          <ul>
-            <div className="titleText">
-              <img src={train} alt="train.svg" />Next trains from Gerrards Cross<img src={train} alt="train.svg" />
+        <div className="App-header-clock">
+          <div>
+            {this.state.time}
+          </div>
+        </div>
+        <div className="App-header-centre">
+            <div className="">
+              Gerrards Cross Timetable
             </div>
-            <div className="trainTimeWrap">{Object.values(this.state.trainsToLondon).map(t => {
-              return <div>{t.sta && 
-                <div key={t.rsid} className="trainTime">
-                  <h2>{t.std} {(t.etd === "On time") ? "" : `(${t.etd})`} => {t.sta} ({timeDifference(t.std, t.sta)} minutes)</h2>
-                </div>
-              }</div>
-          })}</div>
-          </ul>
+        </div>
+        <div className="trainTimeWrap">{Object.values(this.state.trainsToLondon).map(t => {
+          return <div>{t.sta && 
+            <div key={t.rsid} className="trainTime">
+              <div>{t.std} {(t.etd === "On time") ? "" : `(${t.etd})`} => {t.sta} ({timeDifference(t.std, t.sta)} minutes)</div>
+            </div>
+          }</div>
+    })}</div>
+      <div className="footer"></div>
       </div>
     );
   }
