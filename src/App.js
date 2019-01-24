@@ -17,13 +17,15 @@ class App extends Component {
 
   fetchTrainData() {
     return axios.all([
-      axios.get(`http://zed.local:8080/departures`), 
-      axios.get(`http://zed.local:8080/arrivals`)
+      axios.get(`http://localhost:8080/departures`), 
+      axios.get(`http://localhost:8080/arrivals`)
     ])
     .then(axios.spread((departureData, arrivalData) => {
-      this.setState({
-        trainsToLondon: pairUpTrainData(departureData, arrivalData),
-      })
+      if (!!departureData.data.trainServices && !!arrivalData.data.trainServices) {
+        this.setState({
+          trainsToLondon: pairUpTrainData(departureData.data.trainServices, arrivalData.data.trainServices),
+        })
+      }
     }))
   }
 
@@ -52,7 +54,7 @@ class App extends Component {
             <div className="trainTimeWrap">{Object.values(this.state.trainsToLondon).map(t => {
               return <div>{t.sta && 
                 <div key={t.rsid} className="trainTime">
-                  <h2>{t.std} {(t.etd === "On time") ? "" : `(${t.etd})`} => {t.sta} ({timeDifference(t.sta, t.std)} minutes)</h2>
+                  <h2>{t.std} {(t.etd === "On time") ? "" : `(${t.etd})`} => {t.sta} ({timeDifference(t.std, t.sta)} minutes)</h2>
                 </div>
               }</div>
           })}</div>
