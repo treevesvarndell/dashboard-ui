@@ -52,7 +52,7 @@ class App extends Component {
         </div>
         <div className="App-header-centre">
             <div className="">
-              Gerrards Cross
+              Gerrards Cross Departures
             </div>
         </div>
         <div>{Object.values(this.state.trainsToLondon).map(t => {
