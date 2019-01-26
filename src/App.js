@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { pairUpTrainData, timeDifference } from './Functions';
+import { pairUpTrainData, timeDifference, timeDisplay } from './Functions';
 
 const axios = require('axios');
 
@@ -52,16 +52,17 @@ class App extends Component {
         </div>
         <div className="App-header-centre">
             <div className="">
-              Gerrards Cross Timetable
+              Gerrards Cross
             </div>
         </div>
-        <div className="trainTimeWrap">{Object.values(this.state.trainsToLondon).map(t => {
+        <div>{Object.values(this.state.trainsToLondon).map(t => {
           return <div>{t.sta && 
             <div key={t.rsid} className="trainTime">
-              <div>{t.std} {(t.etd === "On time") ? "" : `(${t.etd})`} => {t.sta} ({timeDifference(t.std, t.sta)} minutes)</div>
+              <div>{timeDisplay(t)}</div>
+              <div className="durationTime">{timeDifference(t.std, t.sta)} minutes</div>
             </div>
           }</div>
-    })}</div>
+      })}</div>
       <div className="bottom">&nbsp;</div>
       </div>
     );

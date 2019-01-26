@@ -1,4 +1,4 @@
-import { pairUpTrainData, timeDifference } from './Functions';
+import { pairUpTrainData, timeDifference, timeDisplay } from './Functions';
 
 describe('pair up of arrival and departure train data', () => {
   it('takes raw train arrival and departure data and pairs it up into matching trains', () => {
@@ -43,5 +43,11 @@ describe('time difference', () => {
     it('calculates the estimate journey time in minutes correctly', () => {
       expect(timeDifference('23:59', '00:01')).toEqual(2)
     })
+  })
+})
+
+describe('train time display', () => {
+  it('takes the later of etd and std for the departure', () => {
+    expect(timeDisplay({"etd": "10:00", "std": "09:59", "sta": "11:00"})).toEqual("10:00 => 11:00")
   })
 })
