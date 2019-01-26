@@ -42,12 +42,12 @@
 
 .trainTime {
   background-color: #152341;
-  min-height: 10vh;
+  min-height: 15vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(20px + 1vmin);
+  font-size: calc(10px + 4vmin);
   color: white;
   border-bottom-style: solid;
   border-bottom-color: beige;
