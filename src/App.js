@@ -16,8 +16,8 @@ class App extends Component {
 
   fetchTrainData() {
     return axios.all([
-      axios.get(`http://localhost:8080/departures`), 
-      axios.get(`http://localhost:8080/arrivals`)
+      axios.get(`http://zed.local:8080/departures`), 
+      axios.get(`http://zed.local:8080/arrivals`)
     ])
     .then(axios.spread((departureData, arrivalData) => {
       if (!!departureData.data.trainServices && !!arrivalData.data.trainServices) {
