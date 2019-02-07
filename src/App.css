@@ -5,10 +5,13 @@
 }
 
 .App-header-clock {
-  background-color: #6091fc;
+  display: flex;
+  align-items: center;
+  background-color: #286cff;
   min-height: 10vh;
-  align-items: center;;
-  font-size: calc(35px + 2vmin);
+  justify-content: space-around;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: calc(25px + 2vmin);
   color: rgb(255, 255, 255);
 }
 
