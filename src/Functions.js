@@ -34,5 +34,10 @@ export const timeDifference = (departure, arrival) => {
 }
 
 export const timeDisplay = (train) => {
-  return `${train.std} ➜ ${train.sta}`
+  let formattedStr = ""
+  formattedStr += `${train.std}`
+  if(train.etd) formattedStr += ` (${train.etd})`
+  formattedStr += ` ➜ ${train.sta}`
+  if(train.eta) formattedStr += ` (${train.eta})`
+  return formattedStr
 }

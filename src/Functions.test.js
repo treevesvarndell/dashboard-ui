@@ -47,7 +47,7 @@ describe('time difference', () => {
 })
 
 describe('train time display', () => {
-  it('takes the later of etd and std for the departure', () => {
-    expect(timeDisplay({"etd": "10:00", "std": "09:59", "sta": "11:00"})).toEqual("10:00 => 11:00")
+  it('displays both estimated and actual departure times', () => {
+    expect(timeDisplay({"etd": "10:00", "std": "09:59", "sta": "11:00"})).toEqual("09:59 (10:00) ➜ 11:00")
   })
 })
