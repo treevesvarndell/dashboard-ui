@@ -50,11 +50,7 @@ class App extends Component {
             {this.state.time}
           </div>
         </div>
-        <div className="App-header-centre">
-            <div className="">
-              Gerrards Cross Departures
-            </div>
-        </div>
+        <a class="weatherwidget-io" href="https://forecast7.com/en/51d51n0d13/london/" data-label_1="London" data-label_2="Weather" data-icons="Climacons" data-mode="Current" data-days="3" data-theme="pure" >LONDON WEATHER</a>
         <div>{Object.values(this.state.trainsToLondon).map(t => {
           return <div>{t.sta && 
             <div key={t.rsid} className="trainTime">

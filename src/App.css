@@ -4,20 +4,6 @@
   flex-flow: column;
 }
 
-.App-header-centre {
-  display: flex;
-  align-items: center;
-  background-color: #6091fc;
-  min-height: 10vh;
-  justify-content: space-around;
-  font-size: calc(25px + 2vmin);
-  color: white;
-  border-bottom-style: solid;
-  border-bottom-color: beige;
-  border-top-style: solid;
-  border-top-color: beige;
-}
-
 .App-header-clock {
   display: flex;
   align-items: center;
@@ -45,14 +31,13 @@
 
 .trainTime {
   background-color: #152341;
-  min-height: 15vh;
+  min-height: 12vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 4vmin);
   color: white;
-  border-bottom-style: solid;
   border-bottom-color: beige;
 }
 
