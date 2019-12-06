@@ -1,37 +1,54 @@
-import { pairUpTrainData, timeDifference, timeDisplay } from './Functions';
+import { pairUpTrainData, timeDifference, timeDisplay, arrivalInfo, flattenArrivals } from './Functions';
 
-describe('pair up of arrival and departure train data', () => {
+describe('pair up arrivals and rest of train data', () => {
   it('takes raw train arrival and departure data and pairs it up into matching trains', () => {
-    const departures = [{ 'rsid': '1', 'destination': [{ 'locationName': 'London Marylebone'}], 'std': '09:59', 'etd': '10:00'}]
-    const arrivals = [{ 'rsid': '1', 'sta': '10:00', 'eta': '10:01'}]
-  
-    expect(pairUpTrainData(departures, arrivals)).toEqual({"1": {"eta": "10:01", "etd": "10:00", "sta": "10:00", "std": "09:59"}});
+    const departures = [
+      { 'serviceIdPercentEncoded': '1', 'destination': [{ 'locationName': 'London Marylebone'}], 'std': '09:59', 'etd': '10:00'},
+      { 'serviceIdPercentEncoded': '2', 'destination': [{ 'locationName': 'London Marylebone'}], 'std': '09:59', 'etd': '10:00'}
+    ]
+    const arrivals = {
+      '1': { 'sta': '10:00', 'eta': '10:01'},
+      '2': { 'sta': '10:00', 'eta': '10:01'}
+    }
+
+    expect(pairUpTrainData(departures, arrivals)).toEqual({
+      '1': {'duration': 1, 'eta': '10:01', 'etd': '10:00', 'sta': '10:00', 'std': '09:59'},
+      '2': {'duration': 1, 'eta': '10:01', 'etd': '10:00', 'sta': '10:00', 'std': '09:59'}
+    });
   })
 })
 
-test('only returns trains which have standard arrival time and estimated arrival time', () => {
-  const departures = [{ 'rsid': '1', 'destination': [{ 'locationName': 'London Marylebone' }], 'std': '10:00', 'etd': '10:01' }]
-  const arrivals = [{ 'rsid': '1' }]
-
-  expect(pairUpTrainData(departures, arrivals)).toEqual({});
+describe('trains without certain arrival information', () => {
+  test('ignores trains without matching sta', () => {
+    const departures = [{ 'serviceIdPercentEncoded': '1', 'destination': [{ 'locationName': 'London Marylebone'}], 'std': '09:59', 'etd': '10:00'}]
+    const arrivals = {}
   
+    expect(pairUpTrainData(departures, arrivals)).toEqual({});
+  })
+  
+  test('only returns trains with a destination of london marylebone', () => {
+    const departures = [{ 'serviceIdPercentEncoded': '1', 'destination': [{ 'locationName': 'London Euston' }] }]
+    const arrivals = [{ 'serviceIdPercentEncoded': '1' }]
+  
+    expect(pairUpTrainData(departures, arrivals)).toEqual({});
+  })
+  
+  test('only returns trains which have arrival information', () => {
+    const departures = [{ 'serviceIdPercentEncoded': '1', 'destination': [{ 'locationName': 'London Marylebone' }], 'std': '10:00', 'etd': '10:01' }]
+    const arrivals = [{ 'serviceIdPercentEncoded': '1' }]
+  
+    expect(pairUpTrainData(departures, arrivals)).toEqual({});
+  })
+
+  test('only returns trains which have matching id in arrivals', () => {
+    const departures = [{ 'serviceIdPercentEncoded': '1', 'destination': [{ 'locationName': 'London Marylebone' }], 'std': '10:00', 'etd': '10:01' }]
+    const arrivals = {
+      '2': { 'sta': '10:00', 'eta': '10:01'},
+    }
+  
+    expect(pairUpTrainData(departures, arrivals)).toEqual({});
+  })
 })
-
-test('only returns trains with a destination of london marylebone', () => {
-  const departures = [{ 'rsid': '1', 'destination': [{ 'locationName': 'London Euston' }] }]
-  const arrivals = [{ 'rsid': '1' }]
-
-  expect(pairUpTrainData(departures, arrivals)).toEqual({});
-})
-
-test('only returns trains which have arrival information', () => {
-  const departures = [{ 'rsid': '1', 'destination': [{ 'locationName': 'London Marylebone' }], 'std': '10:00', 'etd': '10:01' }]
-  const arrivals = [{ 'rsid': '1' }]
-
-  expect(pairUpTrainData(departures, arrivals)).toEqual({});
-})
-
-
 
 describe('time difference', () => {
   describe('given two numbers not overlapping with midnight', () => {
@@ -40,14 +57,51 @@ describe('time difference', () => {
     })
   })
   describe('given two times overlapping with midnight', () => {
-    it('calculates the estimate journey time in minutes correctly', () => {
-      expect(timeDifference('23:59', '00:01')).toEqual(2)
+    it('calculates the estimate journey time in minutes', () => {
+      expect(timeDifference('23:59', '00:00')).toEqual(1)
     })
   })
 })
 
 describe('train time display', () => {
   it('displays both estimated and actual departure times', () => {
-    expect(timeDisplay({"etd": "10:00", "std": "09:59", "sta": "11:00"})).toEqual("09:59 (10:00) ➜ 11:00")
+    expect(timeDisplay({'etd': '10:00', 'std': '09:59', 'sta': '11:00'})).toEqual('09:59 (10:00) ➜ 11:00')
+  })
+})
+
+describe('service retrieves arrival information', () => {
+  it('gets the eta and sta from the payload of the last element and returns a new object keyed on service id', () => {
+    const examplePayload = {
+      rsid: 'anArrivalTrain', 
+      subsequentCallingPoints: [
+        {
+          callingPoint: [
+            {
+              locationName: 'Wembley Stadium',
+              st: '23:39',
+              et: 'On time'
+            },
+            {
+              locationName: 'London Marylebone',
+              st: '23:55',
+              et: 'On time'
+            }
+          ]
+        }
+      ]
+    }
+    expect(arrivalInfo('1', examplePayload)).toEqual({ '1': { sta: '23:55', eta: 'On time' }})
+  })
+})
+
+describe('flatten arrivals', () => {
+  it('takes an array of objects with their keys and makes a singleton', () => {
+    expect(flattenArrivals([
+      { '1': { sta: '09:59', eta: 'On time' } }, 
+      { '2': { sta: '09:59', eta: 'On time' } }
+    ])).toEqual({
+       '1': { sta: '09:59', eta: 'On time' } ,
+       '2': { sta: '09:59', eta: 'On time' } 
+    })
   })
 })
