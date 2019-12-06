@@ -64,17 +64,17 @@ class App extends Component {
     return (
       <>
         <div className="App">
+          <a className="weatherwidget-io" href="https://forecast7.com/en/51d51n0d13/london/" data-label_1="London" data-label_2="Weather" data-icons="Climacons" data-mode="Week" data-days="3" data-theme="pure" >LONDON WEATHER</a>
           <div className="App-header-clock">
             <div>
               {this.state.time}
             </div>
           </div>
-          <a className="weatherwidget-io" href="https://forecast7.com/en/51d51n0d13/london/" data-label_1="London" data-label_2="Weather" data-icons="Climacons" data-mode="Week" data-days="3" data-theme="pure" >LONDON WEATHER</a>
           {this.state.loaded ? <div>
             { Object.values(this.state.trainsToLondon).map(t => {
             return <div>
-              <div key={Object.keys(t)[0]} className="trainTime">
-                <div>{timeDisplay(t)}</div>
+              <div key={Object.keys(t)[0]} className={t.delayed ? "delay trainTime" : "trainTime"}>
+            <div>{timeDisplay(t)}</div>
                 <div className="callingAt">{t.callingAt.join(', ')}</div>
                 <div className="durationTime">{t.duration} mins</div>
               </div>

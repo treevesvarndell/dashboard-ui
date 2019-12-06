@@ -12,8 +12,8 @@ describe('pair up arrivals and rest of train data', () => {
     }
 
     expect(pairUpTrainData(departures, arrivals)).toEqual({
-      '1': {'duration': 1, 'eta': '10:01', 'etd': '10:00', 'sta': '10:00', 'std': '09:59'},
-      '2': {'duration': 1, 'eta': '10:01', 'etd': '10:00', 'sta': '10:00', 'std': '09:59'}
+      '1': { 'duration': 1, 'eta': '10:01', 'etd': '10:00', 'sta': '10:01', 'std': '10:00', 'callingAt': undefined, "delayed": true},
+      '2': { 'duration': 1, 'eta': '10:01', 'etd': '10:00', 'sta': '10:01', 'std': '10:00', 'callingAt': undefined, "delayed": true}
     });
   })
 })
@@ -65,7 +65,7 @@ describe('time difference', () => {
 
 describe('train time display', () => {
   it('displays both estimated and actual departure times', () => {
-    expect(timeDisplay({'etd': '10:00', 'std': '09:59', 'sta': '11:00'})).toEqual('09:59 (10:00) ➜ 11:00')
+    expect(timeDisplay({'etd': '10:00', 'std': '10:01'})).toEqual('10:01')
   })
 })
 
@@ -90,7 +90,9 @@ describe('service retrieves arrival information', () => {
         }
       ]
     }
-    expect(arrivalInfo('1', examplePayload)).toEqual({ '1': { sta: '23:55', eta: 'On time' }})
+    expect(arrivalInfo('1', examplePayload)).toEqual({ 
+      '1': { sta: '23:55', eta: 'On time', 'callingAt': ['Wembley Stadium', 'London Marylebone'] }
+    })
   })
 })
 

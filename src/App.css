@@ -7,12 +7,13 @@
 .App-header-clock {
   display: flex;
   align-items: center;
-  background-color: #286cff;
+  background-color: #476C9B;
   min-height: 10vh;
   justify-content: space-around;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: calc(25px + 2vmin);
+  font-family: 'Courier';
+  font-size: calc(15px + 4vmin);
   color: rgb(255, 255, 255);
+  margin-bottom: 2px;
 }
 
 .bottom {
@@ -20,25 +21,30 @@
   font-size: calc(15px + 2vmin);
   align-items: center;
   justify-content: space-around;
-  background-color: #286cff;
-}
-
-.titleText {
-  font-size: xx-large;
-  vertical-align: middle;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+  background-color: #101419;
 }
 
 .trainTime {
-  background-color: #152341;
+  background-color: #101419;
   min-height: 12vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 4vmin);
+  font-size: calc(15px + 3vmin);
+  font-family: 'Courier';
   color: white;
-  border-bottom-color: beige;
+  margin-bottom: 1px;
+}
+
+.delay{
+  background: repeating-linear-gradient(
+    -55deg,
+   #101419,
+   #101419 10px,
+   #25292D 15px,
+   #25292D 25px
+  );
 }
 
 .durationTime {
@@ -47,15 +53,6 @@
 
 .callingAt {
   font-size: calc(5px + 1vmin);
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .loading-wrap {
@@ -76,7 +73,7 @@
   position: absolute;
   width: 6px;
   height: 6px;
-  background: #286cff;
+  background: #6F1A07;
   border-radius: 50%;
   animation: lds-default 1.2s linear infinite;
 }

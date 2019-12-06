@@ -9,13 +9,19 @@ export const pairUpTrainData = (departures, arrivals) => {
   ).reduce((obj, depart) => {
     const arrival = arrivals[depart.serviceIdPercentEncoded]
     if(!!arrival && !!arrival.sta) {
+      const estimatedDeparture = (depart.etd === "On time" || depart.etd === "Delayed") ? null : depart.etd
+      const estimatedArrival = (arrival.eta === "On time" || arrival.eta === "Delayed") ? null : arrival.eta
+      const standardDeparture = depart.std;
+      const standardArrival = arrival.sta;
+
       obj[depart.serviceIdPercentEncoded] = {
-        'std': depart.std,
-        'etd': depart.etd === "On time" ? null : depart.etd,
-        'sta': arrival.sta,
-        'eta': arrival.eta === "On time" ? null : arrival.eta,
-        'duration': timeDifference(depart.std, arrival.sta),
-        'callingAt': arrival.callingAt
+        'std': estimatedDeparture ? estimatedDeparture : standardDeparture,
+        'etd': estimatedDeparture,
+        'sta': estimatedArrival ? estimatedArrival : standardArrival,
+        'eta': estimatedArrival,
+        'duration': timeDifference(depart.std, arrival.sta, estimatedDeparture, estimatedArrival),
+        'callingAt': arrival.callingAt,
+        'delayed': estimatedDeparture || estimatedArrival ? true : false
       }
     }
     return obj
@@ -47,9 +53,15 @@ export const getServiceInfo = (id) => {
   })
 }
 
-export const timeDifference = (departure, arrival) => {
+export const timeDifference = (scheduledDeparture, scheduledArrival, estimatedDeparture, estimatedArrival) => {
+  const arrival = estimatedArrival ? estimatedArrival : scheduledArrival
+  const departure = estimatedDeparture ? estimatedDeparture : scheduledDeparture
+  
   if (moment(arrival, 'HH:mm').get('hour') === 0) {
-    return moment(`1970-01-02 ${arrival}`, 'YYYY-MM-DD HH:mm').diff(moment(`1970-01-01 ${departure}`, 'YYYY-MM-DD HH:mm'), 'minutes')
+    return moment(`1970-01-02 ${arrival}`, 'YYYY-MM-DD HH:mm').diff(
+           moment(`1970-01-01 ${departure}`, 'YYYY-MM-DD HH:mm'), 
+           'minutes'
+    )
   }
   return moment(arrival, 'HH:mm').diff(moment(departure, 'HH:mm'), 'minutes')
 }
@@ -57,8 +69,6 @@ export const timeDifference = (departure, arrival) => {
 export const timeDisplay = (train) => {
   let formattedStr = ""
   formattedStr += `${train.std}`
-  if (train.etd) formattedStr += ` (${train.etd})`
-  formattedStr += ` ➜ ${train.sta}`
-  if (train.eta) formattedStr += ` (${train.eta})`
+  // formattedStr += ` ➜ ${train.sta}`
   return formattedStr
 }
