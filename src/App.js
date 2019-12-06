@@ -64,8 +64,8 @@ class App extends Component {
     return (
       <>
         <div className="App">
-          <a className="weatherwidget-io" href="https://forecast7.com/en/51d51n0d13/london/" data-label_1="London" data-label_2="Weather" data-icons="Climacons" data-mode="Week" data-days="3" data-theme="pure" >LONDON WEATHER</a>
-          <div className="App-header-clock">
+          <a className="weatherwidget-io border" href="https://forecast7.com/en/51d51n0d13/london/" data-font="Noto Sans" data-icons="Climacons Animated" data-days="5" data-theme="original">LONDON WEATHER</a>
+          <div className="App-header-clock border">
             <div>
               {this.state.time}
             </div>

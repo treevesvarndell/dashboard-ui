@@ -13,7 +13,10 @@
   font-family: 'Courier';
   font-size: calc(15px + 4vmin);
   color: rgb(255, 255, 255);
-  margin-bottom: 2px;
+}
+
+.border {
+  margin-bottom: 5px;
 }
 
 .bottom {
@@ -21,7 +24,7 @@
   font-size: calc(15px + 2vmin);
   align-items: center;
   justify-content: space-around;
-  background-color: #101419;
+  background-color: #476C9B;
 }
 
 .trainTime {
