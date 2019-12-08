@@ -88,20 +88,20 @@ class App extends Component {
           }
           <div className="two-columns">
             { this.state.loaded && <>
-              <div>
+              <div className="column">
                 <div className="trainTime header">Trains to London</div>
                 { Object.values(this.state.trainsToLondon).map(t => {
-                  return <div key={Object.keys(t)[0]} className={t.delayed ? "delay trainTime column" : "trainTime column"}>
+                  return <div key={Object.keys(t)[0]} className={t.delayed ? "delay trainTime" : "trainTime"}>
                     <div>{timeDisplay(t)}</div>
                     <div className="callingAt">{t.callingAt.join(', ')}</div>
                     <div className="durationTime">{t.duration} mins</div>
                   </div>
                 })}
               </div>
-              <div>
+              <div className="column">
                 <div className="trainTime header">Trains to Beaconsfield</div>
                 { Object.values(this.state.trainsToWycombe).map(t => {
-                return <div key={Object.keys(t)[0]} className={t.delayed ? "delay trainTime column" : "trainTime column"}>
+                return <div key={Object.keys(t)[0]} className={t.delayed ? "delay trainTime" : "trainTime"}>
                     <div>{timeDisplay(t)}</div>
                     <div className="callingAt">{t.callingAt.join(', ')}</div>
                     <div className="durationTime">{t.duration} mins</div>
@@ -120,8 +120,8 @@ class App extends Component {
 }
 
 App.defaultProps = {
-  departureUrl: "dummy/departures",
-  serviceUrl: "dummy/service"
+  departureUrl: "departures",
+  serviceUrl: "service"
 }
 
 export default App;
