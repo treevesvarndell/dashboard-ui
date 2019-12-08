@@ -3,9 +3,9 @@ import { Object } from 'core-js';
 
 import axios from 'axios';
 
-export const pairUpTrainData = (departures, arrivals) => {
+export const pairUpTrainData = (desiredDestination, departures, arrivals) => {
   const trainsToLondon = departures.filter(train =>
-    train.destination[0].locationName === 'London Marylebone'
+    train.destination[0].locationName === desiredDestination
   ).reduce((obj, depart) => {
     const arrival = arrivals[depart.serviceIdPercentEncoded]
     if(!!arrival && !!arrival.sta) {
@@ -47,8 +47,8 @@ export const flattenArrivals = (listOfArrivals) => {
   }, {})
 }
 
-export const getServiceInfo = (id) => {
-  return axios.get(`http://localhost:8080/service/${id}`).then(response => {
+export const getServiceInfo = (endpoint, id) => {
+  return axios.get(`http://localhost:8080/${endpoint}/${id}`).then(response => {
     return arrivalInfo(id, response.data)
   })
 }
@@ -69,6 +69,5 @@ export const timeDifference = (scheduledDeparture, scheduledArrival, estimatedDe
 export const timeDisplay = (train) => {
   let formattedStr = ""
   formattedStr += `${train.std}`
-  // formattedStr += ` ➜ ${train.sta}`
   return formattedStr
 }

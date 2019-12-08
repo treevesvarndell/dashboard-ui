@@ -25,6 +25,16 @@
   align-items: center;
   justify-content: space-around;
   background-color: #476C9B;
+  margin-top: 5px;
+  min-height: 48.8px;
+}
+
+.two-columns {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
 }
 
 .trainTime {
@@ -40,11 +50,15 @@
   margin-bottom: 1px;
 }
 
+.header {
+  margin-bottom: 5px;
+}
+
 .delay{
   background: repeating-linear-gradient(
     -55deg,
-   #101419,
-   #101419 10px,
+   #0c0f13,
+   #0c0f13 10px,
    #25292D 15px,
    #25292D 25px
   );
