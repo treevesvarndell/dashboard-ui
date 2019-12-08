@@ -20,7 +20,7 @@ class App extends Component {
       ...this.state,
       loaded: false
     })
-    axios.get(`http://localhost:8080/${this.props.departureUrl}`)
+    axios.get(`${this.props.server}/${this.props.departureUrl}`)
       .then(departureData => {
         const departures = departureData.data.trainServices
         if (!!departures && departures.length > 0) {
@@ -75,7 +75,7 @@ class App extends Component {
     return (
       <>
         <div className="App">
-          {/* <a className="weatherwidget-io border" href="https://forecast7.com/en/51d51n0d13/london/" data-font="Noto Sans" data-icons="Climacons Animated" data-days="5" data-theme="original">LONDON WEATHER</a> */}
+          <a className="weatherwidget-io border" href="https://forecast7.com/en/51d51n0d13/london/" data-font="Noto Sans" data-icons="Climacons Animated" data-days="5" data-theme="original">LONDON WEATHER</a>
           <div className="App-header-clock border">
             <div>
               {this.state.time}
@@ -120,6 +120,7 @@ class App extends Component {
 }
 
 App.defaultProps = {
+  server: "http://192.168.2.11:8082",
   departureUrl: "departures",
   serviceUrl: "service"
 }

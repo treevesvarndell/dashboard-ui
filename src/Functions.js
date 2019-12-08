@@ -47,8 +47,8 @@ export const flattenArrivals = (listOfArrivals) => {
   }, {})
 }
 
-export const getServiceInfo = (endpoint, id) => {
-  return axios.get(`http://localhost:8080/${endpoint}/${id}`).then(response => {
+export const getServiceInfo = (server, endpoint, id) => {
+  return axios.get(`${server}/${endpoint}/${id}`).then(response => {
     return arrivalInfo(id, response.data)
   })
 }
