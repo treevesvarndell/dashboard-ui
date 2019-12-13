@@ -27,8 +27,8 @@ class App extends Component {
           return axios.all(departures.map((d) => getServiceInfo(this.props.server, this.props.serviceUrl, d.serviceIdPercentEncoded)))
             .then(arrivals => {
               this.setState({
-                trainsToLondon: pairUpTrainData('London Marylebone', departures, flattenArrivals(arrivals)),
-                trainsToWycombe: pairUpTrainData('High Wycombe', departures, flattenArrivals(arrivals)),
+                trainsToLondon: pairUpTrainData(['London Marylebone'], departures, flattenArrivals(arrivals)),
+                trainsToWycombe: pairUpTrainData(['High Wycombe', 'Bicester North'], departures, flattenArrivals(arrivals)),
                 error: false
               })
             }).catch(e => {
@@ -70,6 +70,21 @@ class App extends Component {
     setInterval(() => this.fetchTrainData(), 60000)
     setInterval(() => this.updateClock(), 1000)
   }
+
+  columnFormat(direction, trainsToDisplay) {
+    return <div className="column">
+      <div className="trainTime header">{direction}</div>
+      { Object.values(trainsToDisplay).map(t => {
+        const time = timeDisplay(t)
+        return <div key={"eastBound_" + time} className={t.delayed ? "delay trainTime" : "trainTime"}>
+          <div className="trainHeader">{t.destination}</div>
+          <div className="time">{time}</div>
+          <div className="callingAt">{t.callingAt} ({t.duration} mins)</div>
+          <div className="durationTime"></div>
+        </div>
+      })}
+    </div>
+  }
   
   render() {
     return (
@@ -81,37 +96,21 @@ class App extends Component {
               {this.state.time}
             </div>
           </div>
-          {!this.state.loaded && 
+          { !this.state.loaded && 
             <div className="loading-wrap">
               <div className="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
             </div>
           }
           <div className="two-columns">
             { this.state.loaded && <>
-              <div className="column">
-                <div className="trainTime header">Trains to London</div>
-                { Object.values(this.state.trainsToLondon).map(t => {
-                  return <div key={Object.keys(t)[0]} className={t.delayed ? "delay trainTime" : "trainTime"}>
-                    <div>{timeDisplay(t)}</div>
-                    <div className="callingAt">{t.callingAt.join(', ')}</div>
-                    <div className="durationTime">{t.duration} mins</div>
-                  </div>
-                })}
-              </div>
-              <div className="column">
-                <div className="trainTime header">Trains to Beaconsfield</div>
-                { Object.values(this.state.trainsToWycombe).map(t => {
-                return <div key={Object.keys(t)[0]} className={t.delayed ? "delay trainTime" : "trainTime"}>
-                    <div>{timeDisplay(t)}</div>
-                    <div className="callingAt">{t.callingAt.join(', ')}</div>
-                    <div className="durationTime">{t.duration} mins</div>
-                  </div>
-                })}
-              </div>
+              { this.columnFormat('Eastbound', this.state.trainsToLondon) }
+              { this.columnFormat('Westbound', this.state.trainsToWycombe) }
              </>
             }
-        </div>
-        { this.state.error && <div className={"error trainTime"}>Trains could not be loaded</div> }
+          </div>
+        { this.state.error && 
+          <div className={"error trainTime"}>Trains could not be loaded</div> 
+        }
         <div className="bottom">&nbsp;</div>
         </div>
       </>

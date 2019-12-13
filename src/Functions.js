@@ -3,9 +3,9 @@ import { Object } from 'core-js';
 
 import axios from 'axios';
 
-export const pairUpTrainData = (desiredDestination, departures, arrivals) => {
+export const pairUpTrainData = (desiredDestinations, departures, arrivals) => {
   const trainsToLondon = departures.filter(train =>
-    train.destination[0].locationName === desiredDestination
+    desiredDestinations.includes(train.destination[0].locationName)
   ).reduce((obj, depart) => {
     const arrival = arrivals[depart.serviceIdPercentEncoded]
     if(!!arrival && !!arrival.sta) {
@@ -13,8 +13,9 @@ export const pairUpTrainData = (desiredDestination, departures, arrivals) => {
       const estimatedArrival = (arrival.eta === "On time" || arrival.eta === "Delayed") ? null : arrival.eta
       const standardDeparture = depart.std;
       const standardArrival = arrival.sta;
-
+      
       obj[depart.serviceIdPercentEncoded] = {
+        'destination': depart.destination[0].locationName,
         'std': estimatedDeparture ? estimatedDeparture : standardDeparture,
         'etd': estimatedDeparture,
         'sta': estimatedArrival ? estimatedArrival : standardArrival,
@@ -32,16 +33,17 @@ export const pairUpTrainData = (desiredDestination, departures, arrivals) => {
 export const arrivalInfo = (id, serviceInfo) => {
   const stops = serviceInfo.subsequentCallingPoints[0].callingPoint
   const callingAt = stops.map(s => s.locationName);
-  return Array.of(stops[stops.length - 1]).map(c => { return { [id]: {eta: c.et, sta: c.st, callingAt: callingAt} } })[0]
+  return Array.of(stops[stops.length - 1]).map(c => { return { [id]: {destination: c.destination, eta: c.et, sta: c.st, callingAt: callingAt} } })[0]
 }
 
 export const flattenArrivals = (listOfArrivals) => {
   return listOfArrivals.reduce((obj, item) => {
     const arrivalId = Object.keys(item)[0];
+    const noOfStops = item[arrivalId].callingAt.length;
     obj[arrivalId] = {
       'sta': item[arrivalId].sta,
       'eta': item[arrivalId].eta,
-      'callingAt': item[arrivalId].callingAt
+      'callingAt': noOfStops > 1 ? noOfStops + " stops" : noOfStops + " stop"
     }
     return obj
   }, {})
