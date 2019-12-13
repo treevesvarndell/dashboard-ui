@@ -24,7 +24,7 @@ class App extends Component {
       .then(departureData => {
         const departures = departureData.data.trainServices
         if (!!departures && departures.length > 0) {
-          return axios.all(departures.map((d) => getServiceInfo(this.props.serviceUrl, d.serviceIdPercentEncoded)))
+          return axios.all(departures.map((d) => getServiceInfo(this.props.server, this.props.serviceUrl, d.serviceIdPercentEncoded)))
             .then(arrivals => {
               this.setState({
                 trainsToLondon: pairUpTrainData('London Marylebone', departures, flattenArrivals(arrivals)),
@@ -120,7 +120,7 @@ class App extends Component {
 }
 
 App.defaultProps = {
-  server: "http://192.168.2.11:8082",
+  server: "http://localhost:8082",
   departureUrl: "departures",
   serviceUrl: "service"
 }
