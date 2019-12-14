@@ -57,17 +57,16 @@
 }
 
 .time {
-
+  font-size: calc(16px + 3vmin);
 }
 
 .callingAt {
-  font-size: calc(10px + 1vmin);
+  font-size: calc(8px);
 }
 
 .durationTime {
-  font-size: calc(10px + 1vmin);
+  font-size: calc(12px + 1vmin);
 }
-
 
 .header {
   margin-bottom: 3px;

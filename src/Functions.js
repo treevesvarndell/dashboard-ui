@@ -13,6 +13,10 @@ export const pairUpTrainData = (desiredDestinations, departures, arrivals) => {
       const estimatedArrival = (arrival.eta === "On time" || arrival.eta === "Delayed") ? null : arrival.eta
       const standardDeparture = depart.std;
       const standardArrival = arrival.sta;
+
+      const date = new Date()
+      const hours = date.getHours() + (date.getTimezoneOffset()) / 60
+      const mins = date.getMinutes()
       
       obj[depart.serviceIdPercentEncoded] = {
         'destination': depart.destination[0].locationName,
@@ -22,6 +26,7 @@ export const pairUpTrainData = (desiredDestinations, departures, arrivals) => {
         'eta': estimatedArrival,
         'duration': timeDifference(depart.std, arrival.sta, estimatedDeparture, estimatedArrival),
         'callingAt': arrival.callingAt,
+        'timeLeft': timeDifference(`${(hours < 10 ? "0" : "") + hours}:${(mins < 10 ? "0" : "") + mins}`, depart.std, null, estimatedDeparture),
         'delayed': estimatedDeparture || estimatedArrival ? true : false
       }
     }
@@ -39,11 +44,13 @@ export const arrivalInfo = (id, serviceInfo) => {
 export const flattenArrivals = (listOfArrivals) => {
   return listOfArrivals.reduce((obj, item) => {
     const arrivalId = Object.keys(item)[0];
-    const noOfStops = item[arrivalId].callingAt.length;
+    const callingAt = item[arrivalId].callingAt
+    const noOfStops = callingAt.length;
     obj[arrivalId] = {
       'sta': item[arrivalId].sta,
       'eta': item[arrivalId].eta,
-      'callingAt': noOfStops > 1 ? noOfStops + " stops" : noOfStops + " stop"
+      'numberOfStops': noOfStops > 1 ? noOfStops + " stops" : noOfStops + " stop",
+      'callingAt': callingAt
     }
     return obj
   }, {})
