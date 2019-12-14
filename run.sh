@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo lsof -ti:5000 | xargs kill
+pgrep -f node | xargs kill
 
 npm install -g serve
 npm install
